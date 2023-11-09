@@ -48,8 +48,17 @@ def inform_user(msg):
         st.write(msg)
 
 
+with st.sidebar:
+    st.header("Options")
+    age = st.number_input("What is your Age", value=21, min_value=13, max_value=60)
+    trimester = st.selectbox(
+        "What stage is your pregnancy?",
+        ["First trimester", "Second trimester", "Third trimester"],
+    )
+
+
 prompt = PromptTemplate.from_template(
-    """You are a professional and friendly Maternal Health adviser and you are helping an expecting mother. She is asking you for advice on a maternal health issues. Your answer should be in markdown notation/syntax. Answer her directly in detail (keep in mind her gestation age is {gestation_age} months) and nothing else. summarize your answer not more than 300 characters. This is the issue: {issue}
+    """You are a professional and friendly Maternal Health adviser and you are helping an expecting mother. She is asking you for advice on a maternal health issues. Your answer should be in markdown notation/syntax. Answer her directly in detail (make sure your answer is relevant to her trimester: {trimester} and her age: {age}) and nothing else. your answer must not be more than 300 characters. This is the issue: {issue}
     Answer her question with the following information: {knowledge}
     """
 )
@@ -118,7 +127,8 @@ if user_input := st.chat_input("Enter your question:"):
             {
                 "knowledge": knowledge_content,
                 "issue": user_input,
-                "gestation_age": 2,
+                "trimester": trimester,
+                "age": age,
             }
         )
     with st.chat_message("assistant"):
