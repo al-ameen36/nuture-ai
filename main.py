@@ -11,17 +11,6 @@ from langchain.vectorstores import Vectara
 
 load_dotenv()
 
-# Sidebar for PDF upload and API keys
-with st.sidebar:
-    st.header("User Info")
-    name = st.text_input("Name", placeholder="Kulu")
-    age = st.number_input("Age", value=21)
-    gestation_age = st.text_input("Gestation Age", value=2)
-    phone = st.text_input("Phone Number", placeholder="+234xxxxxxxxxx")
-    join_newsletter = st.checkbox("Join Newsletter")
-    sign_up = st.button("Sign up")
-
-
 # Constants
 CUSTOMER_ID = os.getenv("CUSTOMER_ID")
 VECTARA_API_KEY = os.getenv("VECTARA_API_KEY")
@@ -108,7 +97,7 @@ if len(st.session_state.messages) == 0:
     # initial bot messages
     welcome_msgs = [
         "Hello. I am pleased to be your dedicated Maternal Health Consultant and I am here to support you throughout your pregnancy journey. Rest assured that your well-being and the health of your baby are my top priorities, ensuring a safe and enjoyable pregnancy experience for you and your baby.",
-        "For a personalized and better experience, please use the side bar to sign up. Please feel free to reach out to me at any time with your questions, concerns, or any updates regarding your pregnancy/baby.",
+        "Please feel free to reach out to me at any time with your questions, concerns, or any updates regarding your pregnancy/baby.",
     ]
     for msg in welcome_msgs:
         inform_user(msg)
@@ -129,7 +118,7 @@ if user_input := st.chat_input("Enter your question:"):
             {
                 "knowledge": knowledge_content,
                 "issue": user_input,
-                "gestation_age": gestation_age,
+                "gestation_age": 2,
             }
         )
     with st.chat_message("assistant"):
@@ -137,17 +126,6 @@ if user_input := st.chat_input("Enter your question:"):
     st.session_state.messages.append(
         {
             "role": "assistant",
-            "content": response + f"""\nname:{name}""",
+            "content": response,
         }
     )
-
-# Run when the submit button is pressed
-if sign_up and name and phone and age and gestation_age:
-    with st.spinner("Thinking...") as status:
-        response = feedback.invoke(
-            {
-                "reg_info": f"""name:{name}\nphone number:{phone}\nage:\n{age}\ngestation age:{gestation_age} months"""
-            }
-        )
-        inform_user(response)
-    st.session_state.messages.append({"role": "assistant", "content": response})
