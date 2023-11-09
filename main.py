@@ -50,15 +50,22 @@ def inform_user(msg):
 
 with st.sidebar:
     st.header("Options")
-    age = st.number_input("What is your Age", value=21, min_value=13, max_value=60)
+    name = st.text_input("Your Name", "kulu")
+    age = st.number_input("Your Age", value=21, min_value=13, max_value=60)
     trimester = st.selectbox(
         "What stage is your pregnancy?",
         ["First trimester", "Second trimester", "Third trimester"],
     )
 
+    st.header("Reminders and tips")
+    phone = st.text_input(
+        "Your Phone Number", disabled=True, placeholder="Currently unavailable"
+    )
+    reminders = st.checkbox("Receive reminders and tips", disabled=True)
+
 
 prompt = PromptTemplate.from_template(
-    """You are a professional and friendly Maternal Health adviser and you are helping an expecting mother. She is asking you for advice on a maternal health issues. Your answer should be in markdown notation/syntax. Answer her directly in detail (make sure your answer is relevant to her trimester: {trimester} and her age: {age}) and nothing else. your answer must not be more than 300 characters. This is the issue: {issue}
+    """You are a professional and friendly Maternal Health adviser and you are helping an expecting mother. She is asking you for advice on a maternal health issues. Your answer should be in markdown notation/syntax. Answer her directly in detail (make sure your answer is relevant to her trimester: {trimester}, her age: {age}, her name: {name}) and nothing else. your answer must not be more than 300 characters. This is the issue: {issue}
     Answer her question with the following information: {knowledge}
     """
 )
@@ -105,7 +112,7 @@ for message in st.session_state.messages:
 if len(st.session_state.messages) == 0:
     # initial bot messages
     welcome_msgs = [
-        "Hello. I am pleased to be your dedicated Maternal Health Consultant and I am here to support you throughout your pregnancy journey. Rest assured that your well-being and the health of your baby are my top priorities, ensuring a safe and enjoyable pregnancy experience for you and your baby.",
+        f"Hello {name}. I am pleased to be your dedicated Maternal Health Consultant and I am here to support you throughout your pregnancy journey. Rest assured that your well-being and the health of your baby are my top priorities, ensuring a safe and enjoyable pregnancy experience for you and your baby.",
         "Please feel free to reach out to me at any time with your questions, concerns, or any updates regarding your pregnancy/baby.",
     ]
     for msg in welcome_msgs:
@@ -128,6 +135,7 @@ if user_input := st.chat_input("Enter your question:"):
                 "knowledge": knowledge_content,
                 "issue": user_input,
                 "trimester": trimester,
+                "name": {name},
                 "age": age,
             }
         )
