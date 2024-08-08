@@ -13,7 +13,7 @@ load_dotenv()
 Settings.llm = Gemini(model="models/gemini-1.5-flash-001")
 Settings.embed_model = GeminiEmbedding(model="models/text-embedding-001")
 
-
+print("ingesting documents...")
 # check if storage already exists
 PERSIST_DIR = os.environ.get("PERSIST_DIR")
 if not os.path.exists(PERSIST_DIR):
@@ -22,3 +22,6 @@ if not os.path.exists(PERSIST_DIR):
     index = VectorStoreIndex.from_documents(documents)
     # store it for later
     index.storage_context.persist(persist_dir=PERSIST_DIR)
+
+
+print("documents ingested")

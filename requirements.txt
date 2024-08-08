@@ -41,6 +41,7 @@ jiter==0.5.0
 joblib==1.4.2
 llama-index-core==0.10.62
 llama-index-embeddings-gemini==0.1.8
+llama-index-embeddings-openai==0.1.11
 llama-index-llms-gemini==0.2.0
 llama-index-readers-file==0.1.32
 markdown-it-py==3.0.0
