@@ -26,7 +26,7 @@ All files are available online for free download
 ### Setup project & Install dependencies
 
     python -m venv venv
-    python install -r requirements.txt
+    pip install -r requirements.txt
 
 ### Create a /data directory
 
