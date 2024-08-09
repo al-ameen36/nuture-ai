@@ -15,7 +15,7 @@ All files are available online for free download
 
 ## Tools used
 
-1. **Google gemini (gemini-1.5-flash-001 model)**
+1. **Google gemini (gemini-1.5-flash-001 and models/embedding-001 models)**
 2. **LlamaIndex**
 3. **Firebase**
 4. **Flutter**

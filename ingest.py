@@ -1,27 +1,33 @@
-import os.path
+import os
 from llama_index.core import (
     VectorStoreIndex,
     SimpleDirectoryReader,
 )
-from llama_index.llms.gemini import Gemini
-from llama_index.embeddings.gemini import GeminiEmbedding
-from llama_index.core import Settings
 from dotenv import load_dotenv
 
 load_dotenv()
 
-Settings.llm = Gemini(model="models/gemini-1.5-flash-001")
-Settings.embed_model = GeminiEmbedding(model="models/text-embedding-001")
+print("Ingesting documents...")
 
-print("ingesting documents...")
-# check if storage already exists
+# Check if storage already exists
 PERSIST_DIR = os.environ.get("PERSIST_DIR")
-if not os.path.exists(PERSIST_DIR):
-    # load the documents and create the index
-    documents = SimpleDirectoryReader("data").load_data()
-    index = VectorStoreIndex.from_documents(documents)
-    # store it for later
-    index.storage_context.persist(persist_dir=PERSIST_DIR)
+if not PERSIST_DIR:
+    print("PERSIST_DIR environment variable is not set.")
+elif not os.path.exists(PERSIST_DIR):
+    # Load the documents and create the index
+    if not os.path.exists("data"):
+        print("Data directory does not exist.")
+    else:
+        try:
+            documents = SimpleDirectoryReader("data").load_data()
+            if not documents:
+                print("No documents found to index.")
+            else:
+                index = VectorStoreIndex.from_documents(documents)
+                # Store it for later
+                index.storage_context.persist(persist_dir=PERSIST_DIR)
+                print(f"Index successfully persisted to {PERSIST_DIR}")
+        except Exception as e:
+            print(f"Error loading documents: {e}")
 
-
-print("documents ingested")
+print("Documents ingested")
